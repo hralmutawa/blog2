@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+	<div style="color:blue; font-weight: bold">
+{{object.title}} <br>
+{{object.author}} <br>
+{{object.content}} <br>
+{{object.publish|timesince}}
+{% if object.image %}
+<img src="{{object.image.url}}"><br>
+{% endif %}
+</div>
+<div class="btn btn-secondary" onclick="ajax_like()">
+    <span id="likes_count"> {{like_count}} </span>
+	<span id="heart"><i class="fa fa-heart {%if liked %} text-danger {% endif %}" aria-hidden="true"></i></span>
+</div>
+
+<script type="text/javascript">
+    function ajax_like() {
+        console.log("Like/Unlike clicked!");
+        $.ajax(
+            {
+                type:'GET',
+                url: '{% url "post:like_button" post_slug=object.slug %}',
+                error: function(){
+                    console.log('error');
+                },
+                success: function(data){ 
+                    console.log('hehe xD');
+                    $("#likes_count").text(data.post_like_count);
+
+                    if(data.action==="like"){
+                        $("#heart").addClass("text-danger");
+                    }else{
+                        $("#heart").removeClass("text-danger")  
+                    }
+                },
+            }
+        );
+    }
+</script>
+
+{%include "comments.html" %}
+{% endblock %}

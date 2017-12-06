@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{%block content %}
+
+<div class="jumbotron">
+    {{request.user}}
+  <h1>These are my posts!</h1>
+  <p><a class="btn btn-primary btn-lg" href="{% url 'post:create' %}" role="button">CREATE</a></p>
+</div>
+
+<form action="" method="GET">
+    <input type="text" name="q" placeholder="Search posts" value="{{request.GET.q}}">
+    <input type="submit" value="Search">
+</form>
+
+{% for object in objects %}
+<div class="card">
+<row>
+	{% if object.image %}
+	<img class="card-img-top" src="{{object.image.url}}" style="float:left; padding-right: 100px"><br>
+	{% endif %}
+Title: <a href="{%url 'post:detail' post_slug=object.slug %}"> <h4 class="card-title">{{object.title}} </h4> </a> <h4>{{object.publish|timesince}} ago</h4><br>
+{% if object.draft%}<h3>Draft</h3>{%endif%}
+{%if object.publish > today %}<h3>Future Post</h3>{% endif %}
+By: {{object.author}} <br>
+<p class="card-text">Content: {{object.content|linebreaks|truncatechars:30}} </p> <br>
+<a href="{%url 'post:update' post_slug=object.slug %}"> <button class="btn btn-primary">Update</button></a>
+<a href="{%url 'post:delete' post_slug=object.slug %}"> <button class="btn btn-primary">Delete</button></a>
+
+</row>
+</div>
+
+{% endfor %}
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if objects.has_previous %}
+            <a href="?page={{ objects.previous_page_number }}&q={{request.GET.q}}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ objects.number }} of {{ objects.paginator.num_pages }}.
+        </span>
+
+        {% if objects.has_next %}
+            <a href="?page={{ objects.next_page_number }}&q={{request.GET.q}}">next</a>
+        {% endif %}
+    </span>
+</div
+{% endblock %}
+
+

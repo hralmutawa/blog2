@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+
+{% block heading %} Login {% endblock %}
+
+{%block content %}
+
+{%include "messages.html" %}
+
+<form action="{% url 'post:login' %}" method="POST">
+	{%csrf_token%}
+	{{form.as_p}}
+	<input type="submit" value="Signup">
+</form>
+	<input class "btn btn-success" type="submit" value="Login Now">
+	<a href="{% url 'github_login' %}" class="btn btn-dark"> Login Using Github</a>
+		<input class "btn btn-success" type="submit" value="Login Now">
+	<a href="{% url 'twitter_login' %}" class="btn"> Login with Abdulateef</a>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{%extends "base.html" %}
+{%block content %}
+<div class="card" style="width: 20rem;">
+  <div class="card-block">
+    <h4 class="card-title">{{response.result.name}}</h4>
+    <p class="card-text">{{response.result.vicinity}}</p>
+    <a href="{{response.result.url}}" class="btn btn-primary">Google Maps Link</a>
+  </div>
+
+<iframe
+id = "map"
+  width="600"
+  height="450"
+  frameborder="0" style="border:0"
+  src="https://www.google.com/maps/embed/v1/directions
+  ?key={{map}}&origin=Oslo+Norway&destination={{response.result.geometry.location.lat}}, {{response.result.geometry.location.lng" allowfullscreen>
+</iframe>
+
+<script>
+	function do_something(lat, lng){
+	var map = $("#map");
+	map.attr(
+		'src', 
+		"https://www.google.com/maps/embed/v1/directions?key={{map}}&origin="+lat+","+lng+"&destination={{response.result.geometry.location.lat}},{{response.result.geometry.location.lng}} ")
+	}
+navigator.geolocation.getCurrentPosition(function(position){
+  do_something(position.coords.latitude, position.coords.longitude);
+});
+</script>
+
+{%endblock%}
